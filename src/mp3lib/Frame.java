@@ -137,8 +137,6 @@ public class Frame extends JFrame implements ActionListener {
 					nameList.add(item.getFileName().toString()); // For every file in the saved directory add it's name as a string to the ArrayList 'nameList'.
 			}
 			
-			Methods.filePaths.clear();
-			
 			libList = new JList(nameList.toArray()); // Create new JList object with the values of 'nameList'
 			libPane.setViewportView(libList); // Draw the JList on the screen.
 			

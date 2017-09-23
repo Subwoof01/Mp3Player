@@ -84,6 +84,7 @@ public class PreferenceFrame extends JDialog implements ActionListener {
 		if (command.equals("OK")) {
 			if (!applied) {
 				if (!dirField.getText().isEmpty()) { // If the text field is not empty, continue.
+					Methods.filePaths.clear(); // Clear filePaths before repopulating it.
 					Methods.dirPath = dirField.getText(); // Set dirPath equal to the text field contents.
 					try {
 						BufferedWriter writer = new BufferedWriter(new FileWriter("lib-dir.txt")); // Create a writer to write to the file lib-dir.txt
@@ -97,6 +98,7 @@ public class PreferenceFrame extends JDialog implements ActionListener {
 					System.err.println("Unable to apply changes: the text field is empty!");
 				}
 				Methods.loadLibrary(Paths.get(dirField.getText()));
+				Main.refreshFrame();
 			}
 			
 			applied = false;
@@ -106,6 +108,7 @@ public class PreferenceFrame extends JDialog implements ActionListener {
 		}
 		if (command.equals("Apply")) {
 			if (!dirField.getText().isEmpty()) { // If the text field is not empty, continue.
+				Methods.filePaths.clear(); // Clear filePaths before repopulating it.
 				Methods.dirPath = dirField.getText(); // Set dirPath equal to the text field contents.
 				try {
 					BufferedWriter writer = new BufferedWriter(new FileWriter("lib-dir.txt")); // Create a writer to write to the file lib-dir.txt
