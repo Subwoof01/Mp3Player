@@ -82,7 +82,7 @@ public class PreferenceFrame extends JDialog implements ActionListener {
 		String command = e.getActionCommand();
 		
 		if (command.equals("OK")) {
-			if (!applied) {
+			if (!applied) { // Check if apply button has been clicked.
 				if (!dirField.getText().isEmpty()) { // If the text field is not empty, continue.
 					Methods.filePaths.clear(); // Clear filePaths before repopulating it.
 					Methods.dirPath = dirField.getText(); // Set dirPath equal to the text field contents.
