@@ -87,15 +87,15 @@ public class Methods {
 	}
 
 	public static void searchDirectory() {
-		dirChooser = new JFileChooser(dirPath);
-		dirChooser.setDialogTitle("Choose directory");
-		dirChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		dirChooser.setAcceptAllFileFilterUsed(false);
+		dirChooser = new JFileChooser(dirPath); // Create new JFileChooser.
+		dirChooser.setDialogTitle("Choose directory"); // Set it's title.
+		dirChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // Set it to select directories only.
+		dirChooser.setAcceptAllFileFilterUsed(false); // Remove all the file filters.
 		
-		int returned = dirChooser.showOpenDialog(dirChooser);
+		int returned = dirChooser.showOpenDialog(dirChooser); // Set return value as integer to 'returned' (this can be either of the following: APPROVE_OPTION, CANCEL_OPTION and ERROR_OPTION)
 		
 		if (returned == JFileChooser.APPROVE_OPTION) {
-			PreferenceFrame.dirField.setText(dirChooser.getSelectedFile().toString());
+			PreferenceFrame.dirField.setText(dirChooser.getSelectedFile().toString()); // Set the chosen directory as String in text field 'dirField'.
 		}
 		
 	}
