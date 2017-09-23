@@ -3,6 +3,8 @@ package mp3lib;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -10,6 +12,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -18,18 +21,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
 import javax.swing.KeyStroke;
-import java.awt.event.KeyEvent;
-import java.awt.event.InputEvent;
+import javax.swing.border.EmptyBorder;
 
 public class Frame extends JFrame implements ActionListener {
 	 
 	private static final long serialVersionUID = 1L;
 	
 	private JPanel contentPane;
-	JList libList;
+	static JList libList;
+	static JScrollPane libPane;
 	
 	static ArrayList<String> nameList = new ArrayList<String>(); // Create new ArrayList of type String.
 
@@ -38,6 +39,7 @@ public class Frame extends JFrame implements ActionListener {
 	 */
 	public Frame() {
 		// Set frame properties.
+		super("MP3 Player");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1123, 801);
 		
@@ -68,6 +70,13 @@ public class Frame extends JFrame implements ActionListener {
 		
 		JMenuItem preferences = new JMenuItem("Preferences");
 		preferences.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
+		preferences.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PreferenceFrame preferences = new PreferenceFrame();
+				preferences.setVisible(true);
+			}
+		});
 		mnFile.add(preferences);
 		
 		JSeparator separator = new JSeparator();
@@ -84,7 +93,7 @@ public class Frame extends JFrame implements ActionListener {
 		splitPane.setResizeWeight(0);
 		contentPane.add(splitPane);
 		
-		JScrollPane libPane = new JScrollPane();
+		libPane = new JScrollPane();
 		splitPane.setLeftComponent(libPane);
 		
 		JSplitPane splitPane_1 = new JSplitPane();
@@ -116,15 +125,29 @@ public class Frame extends JFrame implements ActionListener {
 			item.addActionListener(this);
 		}
 		
+		initialize();
+	}
+	
+	public void initialize() {
 		if (Methods.libSaved) { // Check if the directory has been scanned and saved into memory.
+			
+			nameList.clear();
+			
 			for (Path item : Methods.filePaths) {
-				nameList.add(item.getFileName().toString()); // For every file in the saved directory add it's name as a string to the ArrayList 'nameList'.
+					nameList.add(item.getFileName().toString()); // For every file in the saved directory add it's name as a string to the ArrayList 'nameList'.
 			}
+			
+			Methods.filePaths.clear();
+			
 			libList = new JList(nameList.toArray()); // Create new JList object with the values of 'nameList'
 			libPane.setViewportView(libList); // Draw the JList on the screen.
 			
 			MouseListener mouse = new MouseAdapter() { 
 				public void mouseClicked(MouseEvent e) {
+					if (e.getClickCount() == 1) { // Check for a single-click on an item from the list.
+						// >>USE THIS TO SHOW THE IMAGE AND DETAILS OF SELECTED MP3<<
+					}
+					
 					if (e.getClickCount() == 2) { // Check for a double-click on an item from the list.
 						String selectedFile = (String) libList.getSelectedValue(); // Get the name of the item clicked on.
 						System.out.println("Name: " + selectedFile);
@@ -139,7 +162,9 @@ public class Frame extends JFrame implements ActionListener {
 					}
 				}
 			};
+			
 			libList.addMouseListener(mouse);
+			
 		} else {
 			System.err.println("Shit's fucked... For some reason we couldn't load the files in the specified library folder! :(");
 		}
@@ -150,7 +175,7 @@ public class Frame extends JFrame implements ActionListener {
 		String command = e.getActionCommand();
 		
 		if (command.equals("Open")) {
-			Methods.open();
+			Methods.openFile();
 		}
 		if (command.equals("Exit")) {
 			System.exit(0);
