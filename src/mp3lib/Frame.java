@@ -316,7 +316,7 @@ public class Frame extends JFrame implements ActionListener {
 								System.out.println("Index: " + nameListIndex);
 								System.out.println("Path: " + Methods.filePaths.get(nameListIndex));
 								// >>Use this to call the player window and play the selected file.<<
-							}
+							} 
 						}
 					}
 				}
