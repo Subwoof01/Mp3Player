@@ -1,6 +1,8 @@
 package mp3lib;
 
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -8,9 +10,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -18,11 +24,18 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
 
 public class Frame extends JFrame implements ActionListener {
 	 
@@ -31,6 +44,13 @@ public class Frame extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	static JList libList;
 	static JScrollPane libPane;
+	
+	JLabel duration;
+	JLabel size;
+	JLabel bitrate;
+	JLabel title;
+	JLabel artist;
+	JLabel album;
 	
 	static ArrayList<String> nameList = new ArrayList<String>(); // Create new ArrayList of type String.
 
@@ -113,9 +133,91 @@ public class Frame extends JFrame implements ActionListener {
 		splitPane_1.setRightComponent(detailsPanel);
 		detailsPanel.setLayout(null);
 		
-		JLabel tmpLabel2 = new JLabel("<DETAILS OF MP3 FILE GO HERE>");
-		tmpLabel2.setBounds(157, 109, 222, 16);
-		detailsPanel.add(tmpLabel2);
+		JLabel titleLabel = new JLabel("Title:");
+		titleLabel.setForeground(UIManager.getColor("Button.shadow"));
+		titleLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		titleLabel.setBounds(10, 11, 50, 16);
+		detailsPanel.add(titleLabel);
+		
+		title = new JLabel("123");
+		title.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		title.setBounds(80, 12, 140, 14);
+		detailsPanel.add(title);
+		
+		JLabel artistLabel = new JLabel("Artist:");
+		artistLabel.setForeground(SystemColor.controlShadow);
+		artistLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		artistLabel.setBounds(10, 30, 50, 16);
+		detailsPanel.add(artistLabel);
+		
+		artist = new JLabel("123");
+		artist.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		artist.setBounds(80, 31, 140, 14);
+		detailsPanel.add(artist);
+		
+		JLabel albumLabel = new JLabel("Album:");
+		albumLabel.setForeground(SystemColor.controlShadow);
+		albumLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		albumLabel.setBounds(10, 48, 50, 16);
+		detailsPanel.add(albumLabel);
+		
+		album = new JLabel("123");
+		album.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		album.setBounds(80, 49, 140, 14);
+		detailsPanel.add(album);
+		
+		JLabel duratLabel = new JLabel("Duration:");
+		duratLabel.setForeground(SystemColor.controlShadow);
+		duratLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		duratLabel.setBounds(10, 66, 50, 16);
+		detailsPanel.add(duratLabel);
+		
+		JLabel sizeLabel = new JLabel("Size:");
+		sizeLabel.setForeground(SystemColor.controlShadow);
+		sizeLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		sizeLabel.setBounds(10, 84, 50, 16);
+		detailsPanel.add(sizeLabel);
+		
+		JLabel bitRateLabel = new JLabel("Bit rate:");
+		bitRateLabel.setForeground(SystemColor.controlShadow);
+		bitRateLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		bitRateLabel.setBounds(10, 102, 50, 16);
+		detailsPanel.add(bitRateLabel);
+		
+		duration = new JLabel("123");
+		duration.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		duration.setBounds(80, 68, 140, 14);
+		detailsPanel.add(duration);
+		
+		size = new JLabel("123");
+		size.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		size.setBounds(80, 86, 140, 14);
+		detailsPanel.add(size);
+		
+		bitrate = new JLabel("123");
+		bitrate.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		bitrate.setBounds(80, 104, 140, 14);
+		detailsPanel.add(bitrate);
+		
+		JButton btnPlay = new JButton("|>");
+		btnPlay.setBounds(285, 11, 45, 35);
+		detailsPanel.add(btnPlay);
+		
+		JButton btnPauze = new JButton("||");
+		btnPauze.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnPauze.setBounds(340, 11, 45, 35);
+		detailsPanel.add(btnPauze);
+		
+		JButton btnStop = new JButton("[ ]");
+		btnStop.setBounds(230, 11, 45, 35);
+		detailsPanel.add(btnStop);
+		
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setBounds(230, 48, 155, 14);
+		detailsPanel.add(progressBar);
 		
 		// Create array of all components.
 		JMenuItem[] items = { open, addFiles, addFolder, preferences, exit };
@@ -142,12 +244,57 @@ public class Frame extends JFrame implements ActionListener {
 			
 			MouseListener mouse = new MouseAdapter() { 
 				public void mouseClicked(MouseEvent e) {
+					
+					String selectedFile = (String) libList.getSelectedValue(); // Get the name of the item clicked on.
+					
 					if (e.getClickCount() == 1) { // Check for a single-click on an item from the list.
+						for (String s : nameList) { // Check every name in nameList to see if it equals the selectedFile.
+							if (s.equals(selectedFile)) {
+								int nameListIndex = nameList.indexOf(s); // Get the index of the selectedFile
+								try {
+									File mp3file = new File(Methods.filePaths.get(nameListIndex).toString());
+									Mp3File mp3File = new Mp3File(Methods.filePaths.get(nameListIndex).toString()); // Get the selected mp3 file.
+									ID3v2 id3v2Tag = mp3File.getId3v2Tag(); // Get the ID3v2 tags of selected mp3 file.
+									if (id3v2Tag.getTitle() != null) {
+										title.setText(id3v2Tag.getTitle());
+									} else {
+										title.setText("n/a");
+									}
+									if (id3v2Tag.getArtist() != null) {
+										artist.setText(id3v2Tag.getArtist());
+									} else {
+										artist.setText("n/a");
+									}
+									if (id3v2Tag.getAlbum() != null) {
+										album.setText(id3v2Tag.getAlbum());
+									} else {
+										album.setText("n/a");
+									}
+									if (id3v2Tag.getLength() < 0) {
+										duration.setText(String.valueOf(id3v2Tag.getLength()));
+									} else {
+										duration.setText("n/a");
+									}
+									DecimalFormat df = new DecimalFormat("#.##");
+									double fileSizeInBytes = mp3file.length(); // Get length of file in bytes
+									double fileSizeInKB = fileSizeInBytes / 1024; // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
+									double fileSizeInMB = fileSizeInKB / 1024; // Convert the KB to MegaBytes (1 MB = 1024 KBytes)
+									size.setText(String.valueOf(df.format(fileSizeInMB)) + "mb");
+									bitrate.setText(String.valueOf(mp3File.getBitrate()) + "kbps");
+								} catch (UnsupportedTagException e1) {
+									e1.printStackTrace();
+								} catch (InvalidDataException e1) {
+									e1.printStackTrace();
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								}
+								// >>Use this to call the player window and play the selected file.<<
+							}
+						}
 						// >>USE THIS TO SHOW THE IMAGE AND DETAILS OF SELECTED MP3<<
 					}
 					
 					if (e.getClickCount() == 2) { // Check for a double-click on an item from the list.
-						String selectedFile = (String) libList.getSelectedValue(); // Get the name of the item clicked on.
 						System.out.println("Name: " + selectedFile);
 						for (String s : nameList) { // Check every name in nameList to see if it equals the selectedFile.
 							if (s.equals(selectedFile)) {
