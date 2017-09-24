@@ -51,6 +51,7 @@ public class Frame extends JFrame implements ActionListener {
 	JLabel title;
 	JLabel artist;
 	JLabel album;
+	JLabel file;
 	
 	static ArrayList<String> nameList = new ArrayList<String>(); // Create new ArrayList of type String.
 
@@ -200,7 +201,7 @@ public class Frame extends JFrame implements ActionListener {
 		detailsPanel.add(bitrate);
 		
 		JButton btnPlay = new JButton("|>");
-		btnPlay.setBounds(285, 11, 45, 35);
+		btnPlay.setBounds(410, 11, 45, 35);
 		detailsPanel.add(btnPlay);
 		
 		JButton btnPauze = new JButton("||");
@@ -208,16 +209,27 @@ public class Frame extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		btnPauze.setBounds(340, 11, 45, 35);
+		btnPauze.setBounds(465, 11, 45, 35);
 		detailsPanel.add(btnPauze);
 		
 		JButton btnStop = new JButton("[ ]");
-		btnStop.setBounds(230, 11, 45, 35);
+		btnStop.setBounds(355, 11, 45, 35);
 		detailsPanel.add(btnStop);
 		
 		JProgressBar progressBar = new JProgressBar();
-		progressBar.setBounds(230, 48, 155, 14);
+		progressBar.setBounds(355, 48, 155, 14);
 		detailsPanel.add(progressBar);
+		
+		JLabel fileLabel = new JLabel("File:");
+		fileLabel.setForeground(SystemColor.controlShadow);
+		fileLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		fileLabel.setBounds(10, 119, 50, 16);
+		detailsPanel.add(fileLabel);
+		
+		file = new JLabel("123");
+		file.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		file.setBounds(80, 121, 140, 14);
+		detailsPanel.add(file);
 		
 		// Create array of all components.
 		JMenuItem[] items = { open, addFiles, addFolder, preferences, exit };
@@ -257,6 +269,7 @@ public class Frame extends JFrame implements ActionListener {
 									ID3v2 id3v2Tag = mp3File.getId3v2Tag(); // Get the ID3v2 tags of selected mp3 file.
 									if (id3v2Tag.getTitle() != null) {
 										title.setText(id3v2Tag.getTitle());
+										title.setSize(title.getPreferredSize());
 									} else {
 										title.setText("n/a");
 									}
@@ -270,17 +283,18 @@ public class Frame extends JFrame implements ActionListener {
 									} else {
 										album.setText("n/a");
 									}
-									if (id3v2Tag.getLength() < 0) {
-										duration.setText(String.valueOf(id3v2Tag.getLength()));
-									} else {
-										duration.setText("n/a");
-									}
+									duration.setText(String.valueOf(mp3File.getLengthInSeconds()) + " seconds");
+									
 									DecimalFormat df = new DecimalFormat("#.##");
 									double fileSizeInBytes = mp3file.length(); // Get length of file in bytes
 									double fileSizeInKB = fileSizeInBytes / 1024; // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
 									double fileSizeInMB = fileSizeInKB / 1024; // Convert the KB to MegaBytes (1 MB = 1024 KBytes)
 									size.setText(String.valueOf(df.format(fileSizeInMB)) + "mb");
+									
 									bitrate.setText(String.valueOf(mp3File.getBitrate()) + "kbps");
+									
+									file.setText(Methods.filePaths.get(nameListIndex).toString());
+									file.setSize(file.getPreferredSize());
 								} catch (UnsupportedTagException e1) {
 									e1.printStackTrace();
 								} catch (InvalidDataException e1) {
