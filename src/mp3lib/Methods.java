@@ -1,5 +1,5 @@
-package mp3lib;
 
+package mp3lib;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,7 +45,7 @@ public class Methods {
 		try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(dir)) { // Create a new directory stream of specified dir.
 			for (Path file : dirStream) { // Check every file in dir for extension.
 				String extensionCheck = FilenameUtils.getExtension(file.toString()); // Get the extension of file.
-				if (extensionCheck.equals("mp3")) { // If the file is an mp3 add it to the earlier initialised ArrayList.
+				if (extensionCheck.equals("mp3")) { // If the file is an mp3 add it to the earlier initialized ArrayList.
 					filePaths.add(file);
 				}
 			}

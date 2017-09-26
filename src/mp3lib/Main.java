@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import javax.swing.UIManager;
 
 public class Main {
-
+//THIS IS FOR THE TEST PUSH
 	static Frame frame;
 	
 	public static void main(String[] args) {

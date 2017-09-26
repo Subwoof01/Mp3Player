@@ -15,7 +15,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.border.EmptyBorder;
 
 public class PreferenceFrame extends JDialog implements ActionListener {
@@ -26,6 +25,7 @@ public class PreferenceFrame extends JDialog implements ActionListener {
 	static JTextField dirField;
 	static JButton applyButton;
 	static boolean applied = false;
+	number x = 0;
 
 	/**
 	 * Create the dialog.
