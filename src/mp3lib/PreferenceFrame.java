@@ -25,7 +25,6 @@ public class PreferenceFrame extends JDialog implements ActionListener {
 	static JTextField dirField;
 	static JButton applyButton;
 	static boolean applied = false;
-	number x = 0;
 
 	/**
 	 * Create the dialog.
