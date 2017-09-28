@@ -302,7 +302,6 @@ public class Frame extends JFrame implements ActionListener {
 								} catch (IOException e1) {
 									e1.printStackTrace();
 								}
-								// >>Use this to call the player window and play the selected file.<<
 							}
 						}
 						// >>USE THIS TO SHOW THE IMAGE AND DETAILS OF SELECTED MP3<<

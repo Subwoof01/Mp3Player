@@ -38,7 +38,6 @@ public class Methods {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println(dirPath);
 	}
 	
 	static void loadLibrary(Path dir) {
